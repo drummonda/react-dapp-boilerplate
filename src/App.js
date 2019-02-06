@@ -1,24 +1,33 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+const TodoList = require('../build/contracts/todoList.json');
+const contract = require('truffle-contract');
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      todoListInstance: {},
+      todos: []
+    }
+  }
+
+  async instantiateContract() {
+    const todoList = contract(TodoList);
+    todoList.setProvider(window.web3.currentProvider);
+    const todoListInstance = await todoList.deployed();
+    this.setState({ todoListInstance });
+  }
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
-            Edit <code>src/App.js</code> and save to reload.
+            Sweeet
           </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
         </header>
       </div>
     );
