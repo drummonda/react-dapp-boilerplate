@@ -11,10 +11,11 @@ class App extends Component {
     this.state = {
       todoListInstance: {},
       todos: [],
-      newTodo: '',
+      taskName: '',
     }
     this.handleClick = this.handleClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.getNumTodos = this.getNumTodos.bind(this);
   }
 
   async componentDidMount() {
@@ -28,12 +29,25 @@ class App extends Component {
     this.setState({ todoListInstance });
   }
 
+  async getNumTodos() {
+    const { todoListInstance: { getTotalNumTodos }} = this.state;
+    const totalNumTodos = await getTotalNumTodos();
+    window.alert("there are", totalNumTodos.toString(), "todos");
+  }
+
   async handleClick() {
-    
+    const { taskName, todoListInstance: { createTodo } } = this.state;
+    console.log("taskName", taskName);
+    window.web3.eth.getAccounts(async (err, accounts) => {
+      if(err) throw new Error(err);
+      // create the todo
+      createTodo(taskName, { from: accounts[0] });
+      this.setState({ taskName: '' });
+    })
   }
 
   handleChange({ target: { value }}) {
-    this.setState({ newTodo: value });
+    this.setState({ taskName: value });
   }
 
   render() {
@@ -52,17 +66,22 @@ class App extends Component {
               <FormControl
                 aria-label="Large" 
                 aria-describedby="inputGroup-sizing-sm"
-                placeholder="new todo here" 
+                placeholder="new todo here"
+                value={this.state.taskName}
                 onChange={this.handleChange}
               />
               <InputGroup.Append>
                 <Button
-                  onClick={() => null}>
+                  onClick={this.handleClick}>
                   Click me
                 </Button>
               </InputGroup.Append>
             </InputGroup>
           </div>
+          <Button
+            onClick={this.getNumTodos}>
+            How many todos
+          </Button>
         </header>
       </div>
     );
