@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-const TodoList = require('../build/contracts/todoList.json');
-const contract = require('truffle-contract');
+import TodoList from '../build/contracts/todoList.json';
+import contract from 'truffle-contract';
 
 class App extends Component {
   constructor(props) {
