@@ -40,6 +40,7 @@ contract todoList {
         return todos.length;
     }
 
+    // return a given todo by id
     function returnTodo(uint todoId) public view returns (string memory task, bool completed) {
         Todo storage todo = todos[todoId];
         task = todo.task;

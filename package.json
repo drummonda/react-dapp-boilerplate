@@ -15,6 +15,7 @@
     "bootstrap": "^4.2.1",
     "case-sensitive-paths-webpack-plugin": "2.1.2",
     "chalk": "2.4.1",
+    "compression": "^1.7.3",
     "css-loader": "1.0.0",
     "dotenv": "6.0.0",
     "dotenv-expand": "4.2.0",
@@ -25,6 +26,7 @@
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-jsx-a11y": "6.1.2",
     "eslint-plugin-react": "7.11.1",
+    "express": "^4.16.4",
     "file-loader": "2.0.0",
     "fork-ts-checker-webpack-plugin-alt": "0.4.14",
     "fs-extra": "7.0.0",
@@ -34,7 +36,10 @@
     "jest-pnp-resolver": "1.0.1",
     "jest-resolve": "23.6.0",
     "mini-css-extract-plugin": "0.4.3",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.10",
     "optimize-css-assets-webpack-plugin": "5.0.1",
+    "path": "^0.12.7",
     "pnp-webpack-plugin": "1.1.0",
     "postcss-flexbugs-fixes": "4.1.0",
     "postcss-loader": "3.0.0",
@@ -45,13 +50,19 @@
     "react-bootstrap": "^1.0.0-beta.5",
     "react-dev-utils": "^7.0.1",
     "react-dom": "^16.8.1",
+    "react-redux": "^6.0.0",
+    "react-router-dom": "^4.3.1",
+    "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
     "resolve": "1.8.1",
     "sass-loader": "7.1.0",
+    "socket.io": "^2.2.0",
     "style-loader": "0.23.0",
     "terser-webpack-plugin": "1.1.0",
     "truffle-contract": "^4.0.4",
     "url-loader": "1.1.1",
-    "webpack": "4.19.1",
     "webpack-dev-server": "3.1.14",
     "webpack-manifest-plugin": "2.0.4",
     "workbox-webpack-plugin": "3.6.3"
@@ -59,7 +70,11 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "build-client": "webpack",
+    "build-client-watch": "webpack -w",
+    "start-dev": "NODE_ENV='development' npm run build-client-watch & npm run start-server",
+    "start-server": "nodemon server -e html, js, scss --ignore public --ignore src"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -115,5 +130,10 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "@babel/polyfill": "^7.2.5",
+    "webpack": "^4.19.1",
+    "webpack-cli": "^3.2.3"
   }
 }
