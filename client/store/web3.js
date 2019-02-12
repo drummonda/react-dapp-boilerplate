@@ -3,7 +3,7 @@ import contract from 'truffle-contract'
 // import web3
 import Web3 from 'web3'
 // instantiate our web3 with the provider
-const web3 = new Web3(window.web3.currentProvider)
+let web3 = null
 
 /*
  * 	ACTION TYPES
@@ -11,6 +11,7 @@ const web3 = new Web3(window.web3.currentProvider)
 const ADD_CONTRACT = 'ADD_CONTRACT'
 const SET_ACCOUNT = 'SET_ACCOUNT'
 const SET_ACCOUNT_BALANCE = 'SET_ACCOUNT_BALANCE'
+const WEB3_PRESENT = 'WEB3_PRESENT'
 
 
 /*
@@ -28,10 +29,23 @@ const setAccount = (account, balance) => ({
 	balance
 })
 
+const web3Present = bool => ({
+	type: WEB3_PRESENT,
+	bool
+})
+
 
 /*
  * 	THUNK CREATORS
  */
+export const initializeWeb3 = () => async dispatch => {
+	// if there is a web3 instance present in the window, set it
+	if(window.web3) {
+		const web3 = new Web3(window.web3.currentProvider)
+	}
+	dispatch(web3Present(window.web3 !== undefined))
+}
+
 export const initializeContract = (name, blob) => async dispatch => {
 	try {
 		// create a contract instance from the json blob
