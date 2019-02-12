@@ -1,52 +1,75 @@
 // for working with contract instances
 import contract from 'truffle-contract'
-
-/*
- * 	HELPER FUNCTIONS
- */
-const initializeContract = async (name, blob) => {
-	// create a contract instance from the json blob
-	const contractInstance = contract(blob);
-	// set the provider of the contract instance
-	contractInstance.setProvider(window.web3.currentProvider);
-	// find our deployed instance
-	const deployedInstance = await contractInstance.deployed();
-
-}
-
+// import web3
+import Web3 from 'web3'
+// instantiate our web3 with the provider
+const web3 = new Web3(window.web3.currentProvider)
 
 /*
  * 	ACTION TYPES
  */
-const INITIALIZE_CONTRACT = 'INITIALIZE_CONTRACT'
+const ADD_CONTRACT = 'ADD_CONTRACT'
+const SET_ACCOUNT = 'SET_ACCOUNT'
+const SET_ACCOUNT_BALANCE = 'SET_ACCOUNT_BALANCE'
 
 
 /*
  * 	ACTION CREATORS
  */
-const initializeContract = (name, blob) => ({
+const addContract = (name, instance) => ({
 	type: INITIALIZE,
 	name,
-	blob
+	instance
+})
+
+const setAccount = (account, balance) => ({
+	type: SET_ACCOUNT,
+	account,
+	balance
 })
 
 
 /*
  * 	THUNK CREATORS
  */
-// const initializeContract = (name, blob) => ({
-// 	type: INITIALIZE,
-// 	name,
-// 	blob
-// })
+export const initializeContract = (name, blob) => async dispatch => {
+	try {
+		// create a contract instance from the json blob
+		const contractInstance = contract(blob);
+		// set the provider of the contract instance
+		contractInstance.setProvider(window.web3.currentProvider);
+		// find our deployed instance
+		const deployedInstance = await contractInstance.deployed();
+		// dispatch the action creator to update our state
+		dispatch(addContract(name, deployedInstance))
+	} catch (err) {
+		console.error(err)
+	}
+}
+
+export const initializeAccount = () => async dispatch => {
+	try {
+		// grab the accounts array from the current provider
+		const accounts = await web3.eth.getAccounts()
+		// set the current account
+		const account = accounts[0]
+		// grab the account balance and address
+		const balance = await web3.utils.fromWei(await web3.eth.getBalance(account))
+		// update our redux store
+		dispatch(setAccount(account, balance))
+	} catch (err) {
+		console.error(err)
+	}
+}
 
 
 /*
  * 	INITIAL STATE
  */
 const initialState = {
-	contracts: new Map()
-
+	contracts: new Map(),
+	account: "",
+	balance: 0
 }
 
 
@@ -55,11 +78,14 @@ const initialState = {
  */
 const reducer = (state=initialState, action) => {
 	switch(action.type) {
-		case INITIALIZE_CONTRACT:
-			
+		case ADD_CONTRACT:
+			return { ...state, contracts: contracts.set(action.name, action.instance) }
+
+		case SET_ACCOUNT:
+			return { ...state, account: action.account, balance: action.balance }
 
 		default:
-			return initialState
+			return state
 	}
 }
 

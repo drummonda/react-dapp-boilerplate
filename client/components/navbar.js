@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Navbar, NavDropdown, Nav, Form, FormControl, Button } from 'react-bootstrap';
 
 export default class Menu extends Component {
-  constructor(props) {
+  constructor(props) { 
     super(props);
   }
 

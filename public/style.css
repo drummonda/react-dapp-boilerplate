@@ -2,6 +2,14 @@
   margin: 2% 2% 2% 2%;
 }
 
+#account {
+	color: #2f73e0;
+}
+
+#balance {
+	color: #2fe05b;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
