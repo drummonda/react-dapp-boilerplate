@@ -29,7 +29,7 @@ const setAccount = (account, balance) => ({
 	balance
 })
 
-const web3Present = bool => ({
+export const web3Present = bool => ({
 	type: WEB3_PRESENT,
 	bool
 })
@@ -41,7 +41,7 @@ const web3Present = bool => ({
 export const initializeWeb3 = () => async dispatch => {
 	// if there is a web3 instance present in the window, set it
 	if(window.web3) {
-		const web3 = new Web3(window.web3.currentProvider)
+		web3 = new Web3(window.web3.currentProvider)
 	}
 	dispatch(web3Present(window.web3 !== undefined))
 }
@@ -82,8 +82,9 @@ export const initializeAccount = () => async dispatch => {
  */
 const initialState = {
 	contracts: new Map(),
-	account: "",
-	balance: 0
+	account: "No account found, make sure you are connected to a network",
+	balance: 0,
+	metamask: true
 }
 
 
@@ -97,6 +98,9 @@ const reducer = (state=initialState, action) => {
 
 		case SET_ACCOUNT:
 			return { ...state, account: action.account, balance: action.balance }
+
+		case WEB3_PRESENT:
+			return { ...state, metamask: action.bool }
 
 		default:
 			return state

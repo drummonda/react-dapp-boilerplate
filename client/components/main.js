@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { initializeContract, initializeAccount } from '../store'
+import MetamaskAlert from './metamaskAlert'
+import { initializeContract, initializeAccount, initializeWeb3 } from '../store'
 
 class Main extends Component {
 
 	async componentDidMount() {
-		const { initializeAccount, initializeContract } = this.props
+		const { initializeAccount, initializeWeb3 } = this.props
+		await initializeWeb3()
 		await initializeAccount()
 	}
 
@@ -13,6 +15,7 @@ class Main extends Component {
 		const { account, balance } = this.props
 		return (
 			<div id="main">
+				<MetamaskAlert/>
 				<h2>Welcome to a simple boilerplate for a dApp with React / Redux / Truffle</h2>
 				<h4>ft. Bootstrap</h4>
 				<hr/>
@@ -32,7 +35,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
 	initializeContract: (name, blob) => dispatch(initializeContract(name, blob)),
-	initializeAccount: () => dispatch(initializeAccount())
+	initializeAccount: () => dispatch(initializeAccount()),
+	initializeWeb3: () => dispatch(initializeWeb3())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main)
